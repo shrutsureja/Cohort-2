@@ -13,7 +13,7 @@ function shrutReadFile(){
             resolve(data);
             console.log("inside the fs.readFile");
         });
-       xit
+    //    xit
         console.log("After the readFile function");
     });
     // return p;
