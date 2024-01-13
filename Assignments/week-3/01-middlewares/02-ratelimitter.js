@@ -16,6 +16,34 @@ setInterval(() => {
     numberOfRequestsForUser = {};
 }, 1000)
 
+function rateLimiter(req, res, next){
+  const id = req.headers["user-id"];
+  // if(!numberOfRequestsForUser[id]){
+  //   numberOfRequestsForUser[id] = 1;
+  // }
+  // else {
+  //   numberOfRequestsForUser[id] += 1;
+  //   if(numberOfRequestsForUser[id]> 5){
+  //     res.status(404).send("no entry");
+  //   }
+  // }
+  // next()
+  if(numberOfRequestsForUser[id]){
+    numberOfRequestsForUser[id] += 1;
+    if(numberOfRequestsForUser[id] > 5){
+      res.status(404).send("no entry any more");
+      return
+    }
+    next()
+  }
+  else {
+    numberOfRequestsForUser[id] = 1;
+  }
+  next()
+}
+
+app.use(rateLimiter)
+
 app.get('/user', function(req, res) {
   res.status(200).json({ name: 'john' });
 });
